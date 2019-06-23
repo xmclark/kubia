@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune2s
+spec:
+  containers:
+    - name: html-generator
+      image: luksa/fortune:args
+      args:
+        - "2" # specify the CMD argument for the container
+      volumeMounts:
+        - mountPath: /var/htdocs
+          name: html

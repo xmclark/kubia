@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubia
+spec:
+  # added tls section for https
+  tls:
+    - hosts:
+        - kubia.example.com
+      secretName: tls-secret
+  rules:
+    - host: kubia.example.com # the host name is used when to match against requests
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kubia-nodeport # the gke ingress always routes to nodeport services
+              servicePort: 80
+#          - path: /foo # another path on the same ingress
+#            backend:
+#              serviceName: foo
+#              servicePort: 80
+#    - host: bar.example.com
+#      http:
+#        paths:
+#          - path: /
+#            backend:
+#              serviceName: bar
+#              servicePort: bar

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: external-service # must match the service name
+subsets:
+  - addresses:
+      - ip: 11.11.11.11 # the external service ips
+      - ip: 22.22.22.22
+    ports:
+      - port: 80

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune30s
+spec:
+  containers:
+    - name: html-generator
+      image: luksa/fortune:env
+      env:
+        - name: INTERVAL # The environment variable that is read by the container
+          value: "30" # Numbers always go in quotes
