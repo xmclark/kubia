@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune-configmap-volume
+spec:
+  containers:
+    - name: html-generator
+      image: luksa/fortune:env
+      volumeMounts:
+        - mountPath: /var/htdocs
+          name: html
+      env:
+        - name: INTERVAL
+          valueFrom:
+            configMapKeyRef:
+              name: fortune-config
+              key: sleep-interval # use the normal configmap reference that is just a number in a file
+    - name: web-server
+      image: nginx:alpine
+      volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+          readOnly: true
+        - name: config # k create configmap fortune-config --from-file=configmap-files
+          mountPath: /etc/nginx/conf.d # the fortune-config configmap files are mounted here, see the volume below
+          readOnly: true
+  volumes:
+    - name: html
+      emptyDir: {}
+    - name: config
+      configMap: # the important piece - this volume is populated from the fortune-config configmap
+        name: fortune-config
+        items:
+          # use this to ONLY insert the nginx conf file, and not the sleep interval file
+          - key: my-nginx-config.conf
+            path: gzip.conf
